@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Message from './Message'
 import LoadingIndicator from './LoadingIndicator'
+
+import axios from 'axios'
 
 export default function ChatWindow() {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const [input, setInput] = useState('')
+
+  const API_KEY = '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'
 
   const sendMessage = async (input) => {
     // add user message to state
@@ -18,8 +22,29 @@ export default function ChatWindow() {
     // set loading to true
     setLoading(true)
 
+    // headers for API call
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + API_KEY
+    }
+
+    // data for API call
+    const data = {
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: input }]
+    }
+
     try {
-      console.log("API CALL GOES HERE")
+      // send the user message to the API
+      const response = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        data,
+        { headers }
+      )
+
+      console.log("RESPONSE: ", response)
+
+
     } catch (error) {
       console.log(error)
     }
