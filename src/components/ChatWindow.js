@@ -10,7 +10,7 @@ export default function ChatWindow() {
   const [loading, setLoading] = useState(false)
   const [input, setInput] = useState('')
 
-  const API_KEY = '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'
+  const API_KEY = process.env.REACT_APP_OPENAI_API_KEY
 
   // load messages from local storage
   const loadFromLocalStorage = () => {
@@ -75,7 +75,14 @@ export default function ChatWindow() {
 
       console.log("RESPONSE: ", response)
 
+      // add the API response to state
+      const aiMessage = {
+        sender: 'ai',
+        text: response.data.choices[0].message.content.trim()
+      }
 
+      setMessages([...messages, userMessage, aiMessage])
+      saveToLocalStorage([...messages, userMessage, aiMessage])
     } catch (error) {
       console.log(error)
     }
