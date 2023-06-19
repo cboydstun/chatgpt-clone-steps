@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import Home from './components/Home'
 import ChatWindow from './components/ChatWindow'
 
+import ErrorBoundary from './components/ErrorBoundary'
+
 export default function App() {
     const [inChat, setInChat] = useState(false)
 
@@ -11,8 +13,8 @@ export default function App() {
     };
 
     return (
-        <div>
+        <ErrorBoundary>
             {inChat ? <ChatWindow /> : <Home startChat={startChat} />}
-        </div>
+        </ErrorBoundary>
     )
 }
