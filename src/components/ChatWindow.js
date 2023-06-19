@@ -12,10 +12,41 @@ export default function ChatWindow() {
 
   const API_KEY = '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'
 
+  // load messages from local storage
+  const loadFromLocalStorage = () => {
+    const chatHistory = localStorage.getItem('chatHistory')
+    if (chatHistory) {
+      return JSON.parse(chatHistory)
+    } else {
+      return []
+    }
+  }
+
+
+  // save messages to local storage
+  const saveToLocalStorage = (chatHistory) => {
+    localStorage.setItem('chatHistory', JSON.stringify(chatHistory))
+  }
+
+  // load chat history when the component mounts
+  useEffect(() => {
+    const chatHistory = loadFromLocalStorage()
+    setMessages(chatHistory)
+  }, [])
+
+  // load any saved messages from local storage
+  useEffect(() => {
+    const savedMessages = loadFromLocalStorage()
+    if (savedMessages.length > 0) {
+      setMessages(savedMessages)
+    }
+  }, [])
+
   const sendMessage = async (input) => {
     // add user message to state
     const userMessage = { sender: 'user', text: input }
     setMessages([...messages, userMessage])
+    saveToLocalStorage([...messages, userMessage])
 
     console.log("USER MESSAGE: ", userMessage)
 
