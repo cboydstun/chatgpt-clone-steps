@@ -8,7 +8,38 @@ export default function ChatWindow() {
   const [loading, setLoading] = useState(false)
   const [input, setInput] = useState('')
 
-  const handleSubmit = async (e) => { }
+  const sendMessage = async (input) => {
+    // add user message to state
+    const userMessage = { sender: 'user', text: input }
+    setMessages([...messages, userMessage])
+
+    console.log("USER MESSAGE: ", userMessage)
+
+    // set loading to true
+    setLoading(true)
+
+    try {
+      console.log("API CALL GOES HERE")
+    } catch (error) {
+      console.log(error)
+    }
+
+    // set loading to false
+    setLoading(false)
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault() // prevents page refresh
+
+    if (input.trim() !== '') {
+      sendMessage(input)
+      setInput('')
+    }
+  };
+
+  const handleInput = (e) => {
+    setInput(e.target.value)
+  };
 
   return (
     <div>
@@ -29,7 +60,7 @@ export default function ChatWindow() {
         <input
           type="text"
           value={input}
-          onChange={e => setInput(e.target.value)} />
+          onChange={handleInput} />
         <button type="submit">Send</button>
       </form>
     </div>
